@@ -1,0 +1,16 @@
+name: Trigger benchmarks on GitLab
+
+on: [push]
+
+jobs:
+  test-against-gitlab:
+    name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
+    runs-on: ubuntu-latest
+    steps:
+    - name: Detector benchmarks
+      uses: eic/trigger-gitlab-ci@main
+      with:
+        url: "http://gitlab.com"
+        token: ${{ secrets.TOKEN }}
+        project_id: 37728736
+
