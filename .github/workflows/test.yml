@@ -1,7 +1,5 @@
-name: Trigger benchmarks on GitLab
-
+name: test
 on: [push]
-
 jobs:
   test-against-gitlab:
     name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
