@@ -1,5 +1,5 @@
 # GitHub Action: eic/trigger-gitlab-ci
-![linux](https://github.com/eic/trigger-gitlab-ci/workflows/test/badge.svg)
+![test](https://github.com/eic/trigger-gitlab-ci/workflows/test/badge.svg)
 
 This GitHub Action triggers a GitLab CI pipeline through webhooks.
 
