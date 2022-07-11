@@ -10,7 +10,7 @@ jobs:
     - name: Detector benchmarks
       uses: eic/trigger-gitlab-ci@main
       with:
-        url: "http://gitlab.com"
+        url: "https://gitlab.com"
         token: ${{ secrets.TOKEN }}
         project_id: 37728736
 
