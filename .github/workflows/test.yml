@@ -5,10 +5,12 @@ jobs:
     name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
     runs-on: ubuntu-latest
     steps:
-    - name: Detector benchmarks
+    - name: test-trigger-gitlab-ci
       uses: eic/trigger-gitlab-ci@main
       with:
         url: "https://gitlab.com"
         token: ${{ secrets.TOKEN }}
         project_id: 37728736
-
+    - name: Print web_url
+      run: |
+        echo ${{ test-trigger-gitlab-ci.outputs.web_url }}
