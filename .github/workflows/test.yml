@@ -5,12 +5,13 @@ jobs:
     name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
     runs-on: ubuntu-latest
     steps:
-    - name: test-trigger-gitlab-ci
+    - name: Trigger pipeline on test-trigger-gitlab-ci
+      id: trigger
       uses: eic/trigger-gitlab-ci@main
       with:
         url: "https://gitlab.com"
         token: ${{ secrets.TOKEN }}
         project_id: 37728736
-    - name: Print web_url
+    - name: Print web_url for further use
       run: |
-        echo ${{ test-trigger-gitlab-ci.outputs.web_url }}
+        echo ${{ steps.trigger.outputs.web_url }}
