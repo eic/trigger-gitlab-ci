@@ -12,6 +12,9 @@ jobs:
         url: "https://gitlab.com"
         token: ${{ secrets.TOKEN }}
         project_id: 37728736
+        variables: |
+          VAR1=value1
+          VAR2=value2
     - name: Print web_url for further use
       run: |
         echo ${{ steps.trigger.outputs.web_url }}
