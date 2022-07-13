@@ -21,7 +21,7 @@ inputs:
     required: false
     default: 'main'
   variables:
-    description: 'Additional variables to pass to the pipeline'
+    description: 'Additional variables in VAR=value format to pass to the pipeline'
     required: false
     default: ''
 
@@ -29,13 +29,21 @@ runs:
   using: "composite"
   steps:
     - run: |
-        # TODO Parse VARIABLES into multiple arguments
-        echo ${VARIABLES}
+        # Parse VARIABLES into multiple arguments
+        for variable in ${VARIABLES} ; do
+          if [[ $var =~ ^([a-zA-Z_][a-zA-Z0-9_]*)=(.*) ]] ; then
+            variable_args="${variable_args:-} -F \"variables\[$BASH_REMATCH[1]\]=$BASH_REMATCH[2]\""
+          else
+            echo "Unable to parse $variable
+          fi
+        done
+        # Call webhook
         curl -X POST \
              --fail \
              -o response.json \
              -F "token=${TOKEN}" \
              -F "ref=${REF_NAME}" \
+             ${variable_args} \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
         echo "::set-output web_url=$(cat response.json | jq -c '.web_url')"
       shell: bash
