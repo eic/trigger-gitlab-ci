@@ -45,7 +45,7 @@ runs:
              -F "ref=${REF_NAME}" \
              ${variable_args} \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
-        echo "::set-output web_url=$(cat response.json | jq -c '.web_url')"
+        echo "::set-output name=web_url::$(cat response.json | jq -c '.web_url')"
       shell: bash
       env:
         URL: ${{ inputs.url }}
