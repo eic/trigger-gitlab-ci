@@ -21,8 +21,10 @@ jobs:
         url: https://gitlab.com
         token: ${{ secrets.TOKEN }}
         project_id: 37728736
-        variables:
-          VAR1: "value1"
+        variables: |
+          VAR1="value1"
 ```
 
 In this case, you will need to upload the GitLab CI pipeline trigger token to the GitHub repository or organization secrets.
+The default value of `url` is `https://gitlab.com` and the `variables` parameter is optional.
+There is an additional `ref_name` option which has a default value of `main`.
