@@ -6,7 +6,7 @@ branding:
 inputs:
   url:
     description: 'GitLab server url (at the level under which the API start)'
-    required: true
+    required: false
     default: 'https://gitlab.com'
   project_id:
     description: 'GitLab project ID'
