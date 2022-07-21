@@ -35,6 +35,7 @@ outputs:
 
 runs:
   using: "composite"
+  if:  ${{ inputs.token }}
   steps:
     - id: call-webhook
       run: |
@@ -46,8 +47,6 @@ runs:
             echo "Unable to parse variable $variable"
           fi
         done
-        # Fail when TOKEN empty
-        test -n "${TOKEN}" || echo "Token has zero length" && false
         # Print webhook call
         echo curl -X POST \
              --fail \
