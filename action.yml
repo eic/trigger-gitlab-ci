@@ -46,14 +46,6 @@ runs:
             echo "Unable to parse variable $variable"
           fi
         done
-        # Print webhook call
-        echo curl -X POST \
-             --fail \
-             -o response.json \
-             -F "token=${TOKEN}" \
-             -F "ref=${REF_NAME}" \
-             ${variable_args} \
-             ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
         # Call webhook
         curl -X POST \
              --fail \
@@ -62,8 +54,9 @@ runs:
              -F "ref=${REF_NAME}" \
              ${variable_args} \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
-        echo "web_url: $(cat response.json | jq -c '.web_url')"
-        echo "::set-output name=json::$(cat response.json)
+        # Print and parse json
+        jq . response.json
+        echo "::set-output name=json::$(cat response.json)"
         echo "::set-output name=web_url::$(cat response.json | jq -c '.web_url')"
       shell: bash
       env:
