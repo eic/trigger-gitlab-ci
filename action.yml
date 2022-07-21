@@ -37,7 +37,6 @@ runs:
   using: "composite"
   steps:
     - id: call-webhook
-      if:  ${{ inputs.token }}
       run: |
         # Parse VARIABLES into multiple arguments
         for variable in ${VARIABLES} ; do
@@ -47,6 +46,8 @@ runs:
             echo "Unable to parse variable $variable"
           fi
         done
+        # Fail if no token
+        test -n "${TOKEN}" || echo "::warning ::No secret token was set!"
         # Print webhook call
         echo curl -X POST \
              --fail \
