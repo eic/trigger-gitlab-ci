@@ -22,3 +22,7 @@ jobs:
         test -n ${{ steps.trigger.outputs.web_url }}
         echo web_url=${{ steps.trigger.outputs.web_url }}
         echo json.web_url=${{ fromJson(steps.trigger.outputs.json).web_url }}
+    - uses: peter-evans/commit-comment@v2
+      with:
+        body: |
+          [GitLab pipeline](${{ steps.trigger.outputs.web_url }})
