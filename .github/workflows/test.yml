@@ -1,5 +1,5 @@
 name: test
-on: [push]
+on: [push, pull_request]
 jobs:
   test-against-gitlab:
     name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
