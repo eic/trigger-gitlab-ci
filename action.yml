@@ -25,10 +25,19 @@ inputs:
     required: false
     default: ''
 
+outputs:
+  json:
+    description: "GitLab webhook response (JSON)"
+    value: ${{ steps.call-webhook.outputs.json }}
+  web_url:
+    description: "GitLab pipeline URL"
+    value: ${{ steps.call-webhook.outputs.web_url }}
+
 runs:
   using: "composite"
   steps:
-    - run: |
+    - id: call-webhook
+      run: |
         # Parse VARIABLES into multiple arguments
         for variable in ${VARIABLES} ; do
           if [[ $variable =~ ^([a-zA-Z_][a-zA-Z0-9_]*)=(.*) ]] ; then
@@ -53,7 +62,9 @@ runs:
              -F "ref=${REF_NAME}" \
              ${variable_args} \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
-        echo "web_url: $(cat response.json | jq -c '.web_url')"
+        # Print and parse json
+        jq . response.json
+        echo "::set-output name=json::$(cat response.json)"
         echo "::set-output name=web_url::$(cat response.json | jq -c '.web_url')"
       shell: bash
       env:

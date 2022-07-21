@@ -1,13 +1,15 @@
 name: test
-on: [push]
+on: [push, pull_request]
 jobs:
   test-against-gitlab:
     name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Trigger pipeline on test-trigger-gitlab-ci
       id: trigger
-      uses: eic/trigger-gitlab-ci@main
+      uses: ./
       with:
         url: "https://gitlab.com"
         token: ${{ secrets.TOKEN }}
@@ -15,6 +17,13 @@ jobs:
         variables: |
           VAR1=value1
           VAR2=value2
-    - name: Print web_url for further use
+    - name: Print json and web_url for further use
       run: |
-        echo ${{ steps.trigger.outputs.web_url }}
+        test -n ${{ steps.trigger.outputs.web_url }}
+        echo web_url=${{ steps.trigger.outputs.web_url }}
+        echo json.web_url=${{ fromJson(steps.trigger.outputs.json).web_url }}
+    - uses: peter-evans/commit-comment@v2
+      with:
+        body: |
+          GitLab pipeline has been submitted for this commit:
+          ${{ steps.trigger.outputs.web_url }}
