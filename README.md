@@ -71,5 +71,5 @@ jobs:
     - uses: peter-evans/commit-comment@v2
       with:
         body: |
-          [GitLab pipeline](${{ steps.trigger.outputs.web_url }})
+          GitLab pipeline: ${{ steps.trigger.outputs.web_url }}
 ```
