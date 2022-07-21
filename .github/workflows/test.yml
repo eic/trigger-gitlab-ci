@@ -5,9 +5,11 @@ jobs:
     name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Trigger pipeline on test-trigger-gitlab-ci
       id: trigger
-      uses: eic/trigger-gitlab-ci@main
+      uses: ./
       with:
         url: "https://gitlab.com"
         token: ${{ secrets.TOKEN }}
@@ -17,7 +19,7 @@ jobs:
           VAR2=value2
     - name: Print json and web_url for further use
       run: |
-        test -z "${{ steps.trigger.outputs.json }}"
+        test -n "${{ steps.trigger.outputs.json }}"
         echo "json=${{ steps.trigger.outputs.json }}"
-        test -z "${{ steps.trigger.outputs.web_url }}"
+        test -n "${{ steps.trigger.outputs.web_url }}"
         echo "web_url=${{ steps.trigger.outputs.web_url }}"
