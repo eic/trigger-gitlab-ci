@@ -15,7 +15,6 @@ jobs:
   trigger-gitlab-ci:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
     - uses: eic/trigger-gitlab-ci@v1
       with:
         project_id: 37728736
@@ -38,9 +37,7 @@ A more advanced example could look as follows, passing variables for call backs:
 jobs:
   trigger-gitlab-ci:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
     steps:
-    - uses: actions/checkout@v2
     - uses: eic/trigger-gitlab-ci@v1
       with:
         url: https://gitlab.cern.ch
