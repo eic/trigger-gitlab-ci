@@ -64,6 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: eic/trigger-gitlab-ci@v1
+      id: trigger
       with:
         project_id: 37728736
         token: ${{ secrets.TOKEN }}
