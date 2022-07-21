@@ -25,4 +25,6 @@ jobs:
     - uses: peter-evans/commit-comment@v2
       with:
         body: |
-          [GitLab pipeline](${{ steps.trigger.outputs.web_url }})
+          [GitLab pipeline][1] has been submitted for this commit.
+          
+          [1]: ${{ steps.trigger.outputs.web_url }}
