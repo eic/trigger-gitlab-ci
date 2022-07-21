@@ -5,7 +5,7 @@ branding:
   color: 'blue'
 inputs:
   url:
-    description: 'GitLab server url (at the level under which the API start)'
+    description: 'GitLab server url (at the level under which the API starts)'
     required: false
     default: 'https://gitlab.com'
   project_id:
@@ -13,7 +13,7 @@ inputs:
     required: true
     default: ''
   token:
-    description: 'GitLab pipeline trigger token'
+    description: 'GitLab pipeline trigger token (GitLab Settings > CI/CD > Pipeline Triggers)'
     required: true
     default: ''
   ref_name:

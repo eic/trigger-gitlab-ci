@@ -25,6 +25,8 @@ jobs:
           VAR1="value1"
 ```
 
-In this case, you will need to upload the GitLab CI pipeline trigger token to the GitHub repository or organization secrets.
+In this case, you will need to upload the GitLab CI pipeline trigger token to the GitHub repository or organization secrets. This token can be created in the GitLab repository settings under CI/CD > Pipeline Triggers. 
+
 The default value of `url` is `https://gitlab.com` and the `variables` parameter is optional.
+
 There is an additional `ref_name` option which has a default value of `main`.
