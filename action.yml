@@ -35,9 +35,9 @@ outputs:
 
 runs:
   using: "composite"
-  if:  ${{ inputs.token }}
   steps:
     - id: call-webhook
+      if:  ${{ inputs.token }}
       run: |
         # Parse VARIABLES into multiple arguments
         for variable in ${VARIABLES} ; do
