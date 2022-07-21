@@ -19,7 +19,6 @@ jobs:
           VAR2=value2
     - name: Print json and web_url for further use
       run: |
-        test -n "${{ steps.trigger.outputs.json }}"
-        echo "json=${{ steps.trigger.outputs.json }}"
         test -n "${{ steps.trigger.outputs.web_url }}"
         echo "web_url=${{ steps.trigger.outputs.web_url }}"
+        echo "json.web_url=${{ fromJson(steps.trigger.outputs.json).web_url }}"
