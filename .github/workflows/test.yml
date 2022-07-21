@@ -15,6 +15,9 @@ jobs:
         variables: |
           VAR1=value1
           VAR2=value2
-    - name: Print web_url for further use
+    - name: Print json and web_url for further use
       run: |
-        echo ${{ steps.trigger.outputs.web_url }}
+        test -z "${{ steps.trigger.outputs.json }}"
+        echo "json=${{ steps.trigger.outputs.json }}"
+        test -z "${{ steps.trigger.outputs.web_url }}"
+        echo "web_url=${{ steps.trigger.outputs.web_url }}"
