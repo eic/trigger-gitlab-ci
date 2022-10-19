@@ -66,8 +66,8 @@ runs:
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
         # Print and parse json
         jq . response.json
-        echo "::set-output name=json::$(cat response.json)"
-        echo "::set-output name=web_url::$(cat response.json | jq -c '.web_url')"
+        echo "json=$(cat response.json)" >> $GITHUB_OUTPUT
+        echo "web_url=$(cat response.json | jq -c '.web_url')" >> $GITHUB_OUTPUT
       shell: bash
       env:
         URL: ${{ inputs.url }}
