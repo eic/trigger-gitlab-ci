@@ -17,6 +17,7 @@ jobs:
         variables: |
           VAR1=value1
           VAR2=value2
+          FOOBAR=foo bar
     - name: Print json and web_url for further use
       run: |
         test -n ${{ steps.trigger.outputs.web_url }}
