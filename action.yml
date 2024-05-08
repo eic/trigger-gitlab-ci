@@ -55,7 +55,7 @@ runs:
              -o response.json \
              -F "token=${TOKEN}" \
              -F "ref=${REF_NAME}" \
-             ${variable_args} \
+             "${variable_args[@]}" \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
         # Call webhook
         curl -X POST \
@@ -63,7 +63,7 @@ runs:
              -o response.json \
              -F "token=${TOKEN}" \
              -F "ref=${REF_NAME}" \
-             ${variable_args[@]} \
+             "${variable_args[@]}" \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline \
              || ( RETCODE="$?"; jq . response.json; exit "$RETCODE" )
         # Print and parse json
