@@ -16,7 +16,7 @@ jobs:
         project_id: 37728736
         variables: |
           VAR1=value1
-          VAR2=value2
+          VAR2=value2 value3
     - name: Print json and web_url for further use
       run: |
         test -n ${{ steps.trigger.outputs.web_url }}

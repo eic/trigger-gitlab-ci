@@ -39,13 +39,14 @@ runs:
     - id: call-webhook
       run: |
         # Parse VARIABLES into multiple arguments
-        for variable in ${VARIABLES} ; do
+        variable_args=()
+        while IFS= read -r variable; do
           if [[ $variable =~ ^([a-zA-Z_][a-zA-Z0-9_]*)=(.*) ]] ; then
-            variable_args="${variable_args:-} -F variables[${BASH_REMATCH[1]}]=${BASH_REMATCH[2]}"
+            variable_args+=("-F" "variables[${BASH_REMATCH[1]}]=${BASH_REMATCH[2]}")
           else
             echo "Unable to parse variable $variable"
           fi
-        done
+        done <<< "${VARIABLES}"
         # Fail if no token
         test -n "${TOKEN}" || echo "::warning ::No secret token was set!"
         # Print webhook call
@@ -54,7 +55,7 @@ runs:
              -o response.json \
              -F "token=${TOKEN}" \
              -F "ref=${REF_NAME}" \
-             ${variable_args} \
+             "${variable_args[@]}" \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
         # Call webhook
         curl -X POST \
@@ -62,7 +63,7 @@ runs:
              -o response.json \
              -F "token=${TOKEN}" \
              -F "ref=${REF_NAME}" \
-             ${variable_args} \
+             "${variable_args[@]}" \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline \
              || ( RETCODE="$?"; jq . response.json; exit "$RETCODE" )
         # Print and parse json
