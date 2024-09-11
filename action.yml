@@ -68,8 +68,12 @@ runs:
              || ( RETCODE="$?"; jq . response.json; exit "$RETCODE" )
         # Print and parse json
         jq . response.json
-        echo "json=$(cat response.json)" >> $GITHUB_OUTPUT
-        echo "web_url=$(cat response.json | jq -c '.web_url')" >> $GITHUB_OUTPUT
+        echo "json<<END" >> $GITHUB_OUTPUT
+        cat response.json >> $GITHUB_OUTPUT
+        echo "END" >> $GITHUB_OUTPUT
+        echo "web_url<<END" >> $GITHUB_OUTPUT
+        cat response.json | jq --raw-output '.web_url' >> $GITHUB_OUTPUT
+        echo "END" >> $GITHUB_OUTPUT
       shell: bash
       env:
         URL: ${{ inputs.url }}
