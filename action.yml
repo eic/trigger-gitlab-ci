@@ -49,23 +49,19 @@ runs:
         done <<< "${VARIABLES}"
         # Fail if no token
         test -n "${TOKEN}" || echo "::warning ::No secret token was set!"
-        # Print webhook call
-        echo curl -X POST \
-             --fail \
-             -o response.json \
-             -F "token=${TOKEN}" \
-             -F "ref=${REF_NAME}" \
-             "${variable_args[@]}" \
-             ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline
+        # Enable command echo
+        set -x
         # Call webhook
         curl -X POST \
-             --fail \
+             --fail-with-body \
              -o response.json \
              -F "token=${TOKEN}" \
              -F "ref=${REF_NAME}" \
              "${variable_args[@]}" \
              ${URL}/api/v4/projects/${PROJECT_ID}/trigger/pipeline \
              || ( RETCODE="$?"; jq . response.json; exit "$RETCODE" )
+        # Disable command echo
+        set +x
         # Print and parse json
         jq . response.json
         echo "json<<END" >> $GITHUB_OUTPUT
