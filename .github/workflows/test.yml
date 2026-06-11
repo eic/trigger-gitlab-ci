@@ -1,29 +1,57 @@
 name: test
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 jobs:
   test-against-gitlab:
     name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Trigger pipeline on test-trigger-gitlab-ci
-      id: trigger
-      uses: ./
-      with:
-        url: "https://gitlab.com"
-        token: ${{ secrets.TOKEN }}
-        project_id: 37728736
-        variables: |
-          VAR1=value1
-          VAR2=value2 value3
-    - name: Print json and web_url for further use
-      run: |
-        test -n ${{ steps.trigger.outputs.web_url }}
-        echo web_url=${{ steps.trigger.outputs.web_url }}
-        echo json.web_url=${{ fromJson(steps.trigger.outputs.json).web_url }}
-    - uses: peter-evans/commit-comment@v2
-      with:
-        body: |
-          GitLab pipeline has been submitted for this commit:
-          ${{ steps.trigger.outputs.web_url }}
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Trigger pipeline on test-trigger-gitlab-ci
+        id: trigger
+        uses: ./
+        with:
+          url: "https://gitlab.com"
+          token: ${{ secrets.TOKEN }}
+          project_id: 37728736
+          variables: |
+            VAR1=value1
+            VAR2=value2 value3
+      - name: Print json and web_url for further use
+        run: |
+          test -n ${{ steps.trigger.outputs.web_url }}
+          echo web_url=${{ steps.trigger.outputs.web_url }}
+          echo json.web_url=${{ fromJson(steps.trigger.outputs.json).web_url }}
+      - uses: peter-evans/commit-comment@v4
+        with:
+          body: |
+            GitLab pipeline has been submitted for this commit:
+            ${{ steps.trigger.outputs.web_url }}
+
+  test-without-variables:
+    name: Test against https://gitlab.com/eic/test-trigger-gitlab-ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Trigger pipeline on test-trigger-gitlab-ci
+        id: trigger
+        uses: ./
+        with:
+          url: "https://gitlab.com"
+          token: ${{ secrets.TOKEN }}
+          project_id: 37728736
+      - name: Print json and web_url for further use
+        run: |
+          test -n ${{ steps.trigger.outputs.web_url }}
+          echo web_url=${{ steps.trigger.outputs.web_url }}
+          echo json.web_url=${{ fromJson(steps.trigger.outputs.json).web_url }}
+      - uses: peter-evans/commit-comment@v4
+        with:
+          body: |
+            GitLab pipeline has been submitted for this commit:
+            ${{ steps.trigger.outputs.web_url }}

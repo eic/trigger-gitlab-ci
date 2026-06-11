@@ -1,29 +1,29 @@
-name: 'Trigger GitLab CI through webhooks'
-description: 'Triggers the GitLab CI pipeline through webhook pipeline trigger and associated token'
+name: "Trigger GitLab CI through webhooks"
+description: "Triggers the GitLab CI pipeline through webhook pipeline trigger and associated token"
 branding:
-  icon: 'play'
-  color: 'blue'
+  icon: "play"
+  color: "blue"
 inputs:
   url:
-    description: 'GitLab server url (at the level under which the API starts)'
+    description: "GitLab server url (at the level under which the API starts)"
     required: false
-    default: 'https://gitlab.com'
+    default: "https://gitlab.com"
   project_id:
-    description: 'GitLab project ID'
+    description: "GitLab project ID"
     required: true
-    default: ''
+    default: ""
   token:
-    description: 'GitLab pipeline trigger token (GitLab Settings > CI/CD > Pipeline Triggers)'
+    description: "GitLab pipeline trigger token (GitLab Settings > CI/CD > Pipeline Triggers)"
     required: true
-    default: ''
+    default: ""
   ref_name:
-    description: 'GitLab project ref_name (branch or tag name; defaults to main)'
+    description: "GitLab project ref_name (branch or tag name; defaults to main)"
     required: false
-    default: 'main'
+    default: "main"
   variables:
-    description: 'Additional variables in VAR=value format to pass to the pipeline'
+    description: "Additional variables in VAR=value format to pass to the pipeline"
     required: false
-    default: ''
+    default: ""
 
 outputs:
   json:
@@ -40,13 +40,15 @@ runs:
       run: |
         # Parse VARIABLES into multiple arguments
         variable_args=()
-        while IFS= read -r variable; do
-          if [[ $variable =~ ^([a-zA-Z_][a-zA-Z0-9_]*)=(.*) ]] ; then
-            variable_args+=("-F" "variables[${BASH_REMATCH[1]}]=${BASH_REMATCH[2]}")
-          else
-            echo "Unable to parse variable $variable"
-          fi
-        done <<< "${VARIABLES}"
+        if [[ -n "${VARIABLES}" ]]; then
+          while IFS= read -r variable; do
+            if [[ $variable =~ ^([a-zA-Z_][a-zA-Z0-9_]*)=(.*) ]] ; then
+              variable_args+=("-F" "variables[${BASH_REMATCH[1]}]=${BASH_REMATCH[2]}")
+            else
+              echo "Unable to parse variable $variable"
+            fi
+          done <<< "${VARIABLES}"
+        fi
         # Fail if no token
         test -n "${TOKEN}" || echo "::warning ::No secret token was set!"
         # Enable command echo
@@ -64,12 +66,14 @@ runs:
         set +x
         # Print and parse json
         jq . response.json
-        echo "json<<END" >> $GITHUB_OUTPUT
-        cat response.json >> $GITHUB_OUTPUT
-        echo "END" >> $GITHUB_OUTPUT
-        echo "web_url<<END" >> $GITHUB_OUTPUT
-        cat response.json | jq --raw-output '.web_url' >> $GITHUB_OUTPUT
-        echo "END" >> $GITHUB_OUTPUT
+        {
+          printf 'json<<__JSON__\n'
+          cat response.json
+          printf '\n__JSON__\n'
+          printf 'web_url<<__URL__\n'
+          jq --raw-output '.web_url' response.json
+          printf '\n__URL__\n'
+        } >> "$GITHUB_OUTPUT"
       shell: bash
       env:
         URL: ${{ inputs.url }}
