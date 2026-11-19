@@ -30,7 +30,8 @@ This action requires the following inputs:
 This action also accepts several optional inputs:
 - `url`: GitLab server url (at the level under which the API starts), default: `https://gitlab.com`
 - `ref_name`: GitLab project ref_name (branch or tag name), default: `main`
-- `variables`: Additional variables in `VAR1=value VAR2=value` format to pass to the pipeline, default: ``
+- `variables`: Additional variables to pass to the pipeline, one `VAR=value` per line, default: ``.
+  Values are passed literally (via `curl --form-string`), so `;`, `"`, `@` and `<` are safe. One pair of enclosing double quotes (`VAR="value"`) is stripped. Blank lines are ignored.
 
 A more advanced example could look as follows, passing variables for call backs:
 ```yaml
@@ -45,8 +46,8 @@ jobs:
         token: ${{ secrets.TOKEN }}
         ref_name: master
         variables: |
-          GITHUB_REPOSITORYURL: ${{ github.repositoryUrl }}
-          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REPOSITORYURL=${{ github.repositoryUrl }}
+          GITHUB_SHA=${{ github.sha }}
 ```
 
 ### Outputs

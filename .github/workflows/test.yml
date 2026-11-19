@@ -21,6 +21,8 @@ jobs:
           variables: |
             VAR1=value1
             VAR2=value2 value3
+            VAR3=value with; semicolon and "quotes"
+            VAR4="quoted value"
       - name: Print json and web_url for further use
         run: |
           test -n ${{ steps.trigger.outputs.web_url }}
